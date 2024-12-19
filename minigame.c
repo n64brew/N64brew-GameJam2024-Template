@@ -89,12 +89,12 @@ void minigame_loadall()
 
 
 /*==============================
-    minigame_play
-    Executes a minigame
-    @param  The internal filename of the minigame to play
+    minigame_loadnext
+    Loads a minigame
+    @param  The internal filename of the minigame to load
 ==============================*/
 
-void minigame_play(char* name)
+void minigame_loadnext(char* name)
 {
     debugf("Loading minigame: %s\n", name);
 
@@ -131,6 +131,7 @@ void minigame_play(char* name)
 void minigame_end()
 {
     global_minigame_ending = true;
+    core_level_changeto(LEVEL_RESULTS);
 }
 
 

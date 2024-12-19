@@ -527,7 +527,7 @@ void minigame_fixedloop(float deltatime){
         }
         game_over_counter -= deltatime;
         if(game_over_counter <= 0){
-            core_set_winner(winnerIndex);
+            core_set_winner(winnerIndex-1);
             minigame_end();
         }
     }

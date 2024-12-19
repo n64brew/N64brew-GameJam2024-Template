@@ -124,9 +124,9 @@ void Player::render(uint32_t id, T3DViewport &viewport, float deltaTime, MapRend
 
     t3d_mat4fp_from_srt_euler(
         matFP.get(),
-        (float[3]){0.12f+displayTemperature, 0.12f+displayTemperature, 0.12f+displayTemperature},
-        (float[3]){0.0f, direction, 0},
-        currentPos.v
+        T3DVec3{0.12f+displayTemperature, 0.12f+displayTemperature, 0.12f+displayTemperature},
+        T3DVec3{0.0f, direction, 0},
+        currentPos
     );
 
     rdpq_sync_pipe();

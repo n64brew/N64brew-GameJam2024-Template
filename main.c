@@ -9,9 +9,12 @@ and provides a basic game loop.
 #include <time.h>
 #include <unistd.h>
 #include "core.h"
+#include "logo.h"
 #include "menu.h"
 #include "config.h"
 #include "minigame.h"
+
+#define DEBUG 1
 
 
 /*==============================
@@ -52,25 +55,26 @@ int main()
     srand(seed);
     register_VI_handler((void(*)(void))rand);
 
+    //if (sys_reset_type() == RESET_COLD) {
+    //    n64brew_logo();
+    //    libdragon_logo();
+    //}
+
+    // Initialize the level system
+    core_initlevels();
+    core_level_changeto(LEVEL_MINIGAMESELECT);
+
     // Program Loop
     while (1)
     {
-        char* game;
         float accumulator = 0;
         const float dt = DELTATIME;
 
-        // Show the menu
-        game = menu();
-        
-        // Set the initial minigame
-        minigame_play(game);
-
-        // Initialize the minigame
-        core_reset_winners();
-        minigame_get_game()->funcPointer_init();
+        // Initialize the level
+        core_level_doinit();
         
         // Handle the engine loop
-        while (!minigame_get_ended())
+        while (!core_level_waschanged())
         {
             float frametime = display_get_delta_time();
             
@@ -79,13 +83,11 @@ int main()
                 frametime = 0.25f;
             
             // Perform the update in discrete steps (ticks)
-            if (minigame_get_game()->funcPointer_fixedloop) {
-                accumulator += frametime;
-                while (accumulator >= dt)
-                {
-                    minigame_get_game()->funcPointer_fixedloop(dt);
-                    accumulator -= dt;
-                }
+            accumulator += frametime;
+            while (accumulator >= dt)
+            {
+                core_level_dofixedloop(dt);
+                accumulator -= dt;
             }
 
             // Read controler data
@@ -94,17 +96,10 @@ int main()
             
             // Perform the unfixed loop
             core_set_subtick(((double)accumulator)/((double)dt));
-            minigame_get_game()->funcPointer_loop(frametime);
+            core_level_doloop(frametime);
         }
         
         // End the current level
-        rspq_wait();
-        for (int i=0; i<32; i++)
-            mixer_ch_stop(i);
-        minigame_get_game()->funcPointer_cleanup();
-        minigame_cleanup();
-
-        mixer_close();
-        mixer_init(32);
+        core_level_docleanup();
     }
 }
