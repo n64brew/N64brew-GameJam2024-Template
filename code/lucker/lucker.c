@@ -86,10 +86,7 @@ void slot_init (player *player, color_t color, T3DVec3 pos[], T3DVec3 rot[]) {
     player->sl.firstMatFP = malloc_uncached(sizeof(T3DMat4FP));
     player->sl.secondMatFP = malloc_uncached(sizeof(T3DMat4FP));
     player->sl.thirdMatFP = malloc_uncached(sizeof(T3DMat4FP));
-    scaleMat = malloc_uncached(sizeof(T3DMat4));
-    xRMat = malloc_uncached(sizeof(T3DMat4));
-    yRMat = malloc_uncached(sizeof(T3DMat4));
-    zRMat = malloc_uncached(sizeof(T3DMat4));
+    
 
     for (int i = 0; i < 3; i++) {
         player->sl.pos[i] = pos[player->playerNumber * 3 + i];
@@ -213,6 +210,11 @@ void minigame_init()
         battle_player_init(&players[i], colors[i], fighterModel);
     }
     
+    scaleMat = malloc_uncached(sizeof(T3DMat4));
+    xRMat = malloc_uncached(sizeof(T3DMat4));
+    yRMat = malloc_uncached(sizeof(T3DMat4));
+    zRMat = malloc_uncached(sizeof(T3DMat4));
+
     battle_init();
 
     syncPoint = 0;
