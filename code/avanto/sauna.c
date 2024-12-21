@@ -220,7 +220,7 @@ void sauna_init() {
   kiuas_particle_source.paused = true;
   particle_source_update_transform(&kiuas_particle_source);
 
-  min_time_before_exiting = 3.f;
+  min_time_before_exiting = 6.f;
 
   memset(ais, 0, sizeof(ais));
   for (size_t i = 0; i < 4; i++) {
@@ -872,13 +872,10 @@ void sauna_dynamic_loop_render(float delta_time) {
 
 void sauna_dynamic_loop_post(float delta_time) {
   joypad_buttons_t held[4];
-  joypad_buttons_t pressed[4];
   for (size_t i = 0; i < core_get_playercount(); i++) {
     held[i] = joypad_get_buttons_held(core_get_playercontroller(i));
-    pressed[i] = joypad_get_buttons_pressed(core_get_playercontroller(i));
   }
   for (size_t i = core_get_playercount(); i < 4; i++) {
-    pressed[i].raw = 0;
     if (sauna_stage == SAUNA_GAME) {
       ais[i].handler(&ais[i], &held[i]);
     }
@@ -892,11 +889,7 @@ void sauna_dynamic_loop_post(float delta_time) {
       min_time_before_exiting -= delta_time;
     }
     else {
-      for (size_t i = 0; i < 4; i++) {
-        if (pressed[i].a || pressed[i].b) {
-          sauna_stage++;
-        }
-      }
+      sauna_stage++;
     }
   }
 
