@@ -5,14 +5,11 @@
               You have no reason to be incuding this file
     ***************************************************************/
 
-    #include "minigame.h"
+    void menu_init();
+    void menu_loop(float deltatime);
+    void menu_cleanup();
 
-
-    /*==============================
-        menu
-        Select a minigame and return the minigame to play
-        @return The minigame to play
-    ==============================*/
-    char* menu(void);
+    void menu_reset();
+    void menu_copy_minigame_frame();
 
 #endif
